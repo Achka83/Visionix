@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VISIONIX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #08080D;
+      --deep:     #0F0F1A;
+      --surface:  #141420;
+      --card:     rgba(20, 20, 32, 0.85);
+      --gold:     #C9A84C;
+      --gold-lt:  #E2C06A;
+      --gold-dim: rgba(201, 168, 76, 0.15);
+      --white:    #F4F4F8;
+      --muted:    rgba(244, 244, 248, 0.45);
+      --border:   rgba(201, 168, 76, 0.18);
+      --radius:   18px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── BACKGROUND ── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(100,80,200,0.07) 0%, transparent 60%),
+        var(--black);
+    }
+
+    /* animated grid lines */
+    .bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
+
+    @keyframes gridScroll {
+      from { background-position: 0 0; }
+      to   { background-position: 60px 60px; }
+    }
+
+    /* ── SCREENS ── */
+    .screen {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 52px 48px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 60px rgba(201,168,76,0.05);
+      animation: cardIn 0.6s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(32px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 44px;
+    }
+
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--gold) 0%, #9A6F20 100%);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 20px;
+      color: #08080D;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      display: flex; flex-direction: column; gap: 1px;
+    }
+
+    .logo-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 18px;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+
+    .logo-tagline {
+      font-size: 10px; font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ── LOGIN FORM ── */
+    .login-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px; font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .login-sub {
+      font-size: 13px; font-weight: 400;
+      color: var(--muted);
+      margin-bottom: 36px;
+      letter-spacing: 0.01em;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .field-wrap {
+      position: relative; margin-bottom: 28px;
+    }
+
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 500;
+      color: var(--white);
+      letter-spacing: 0.12em;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+
+    .field-input::placeholder { color: rgba(244,244,248,0.2); letter-spacing: 0.05em; }
+
+    .field-input:focus {
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(201,168,76,0.04);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+    }
+
+    .eye-btn {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); padding: 4px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s;
+    }
+    .eye-btn:hover { color: var(--gold); }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, #9A6F20 100%);
+      border: none; border-radius: 10px;
+      padding: 15px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #08080D;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.25);
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(201,168,76,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .error-msg {
+      font-size: 12px; font-weight: 500;
+      color: #FF6B6B;
+      margin-top: 14px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      min-height: 18px;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .error-msg.visible { opacity: 1; }
+
+    /* ── MENU CARD (wider) ── */
+    .menu-card {
+      max-width: 560px;
+      padding: 52px 48px 48px;
+    }
+
+    .menu-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .menu-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 30px; font-weight: 700;
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .menu-sub {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 36px;
+    }
+
+    /* ── APP TILES ── */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .app-tile {
+      position: relative;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 28px 24px 24px;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s, box-shadow 0.25s;
+      overflow: hidden;
+    }
+
+    .app-tile::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .app-tile:hover {
+      border-color: rgba(201,168,76,0.3);
+      background: rgba(201,168,76,0.05);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.15);
+    }
+
+    .app-tile:hover::before { opacity: 1; }
+
+    .app-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+
+    .app-icon.resell { background: rgba(201,168,76,0.15); }
+    .app-icon.bet    { background: rgba(100,80,220,0.2); }
+
+    .app-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      color: var(--white);
+    }
+
+    .app-desc {
+      font-size: 11px; font-weight: 400;
+      color: var(--muted);
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+    }
+
+    .app-arrow {
+      position: absolute; bottom: 20px; right: 20px;
+      font-size: 16px; color: var(--gold);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .app-tile:hover .app-arrow {
+      opacity: 1; transform: translateX(0);
+    }
+
+    /* ── FOOTER ── */
+    .card-footer {
+      margin-top: 36px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer-line {
+      font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(244,244,248,0.2);
+    }
+
+    .logout-btn {
+      background: none; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .logout-btn:hover { border-color: rgba(255,80,80,0.4); color: #FF6B6B; }
+
+    /* ── SHAKE ── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-5px); }
+      80%      { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .card { padding: 36px 28px; }
+      .menu-card { padding: 36px 28px 32px; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .menu-headline { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- ── LOGIN SCREEN ── -->
+<div class="screen" id="loginScreen">
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">V</div>
+      <div class="logo-text">
+        <span class="logo-name">VISIONIX</span>
+        <span class="logo-tagline">Private Access</span>
+      </div>
+    </div>
+
+    <h1 class="login-title">Bienvenue</h1>
+    <p class="login-sub">Entrez votre code d'accès pour continuer.</p>
+
+    <div class="field-wrap">
+      <label class="field-label" for="pwdInput">Code d'accès</label>
+      <input
+        class="field-input"
+        type="password"
+        id="pwdInput"
+        placeholder="••••••"
+        maxlength="20"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="eye-btn" id="eyeBtn" title="Afficher / masquer" tabindex="-1">
+        <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </div>
+
+    <button class="btn-primary" id="loginBtn">Accéder →</button>
+    <p class="error-msg" id="errorMsg">Code incorrect. Veuillez réessayer.</p>
+  </div>
+</div>
+
+<!-- ── MENU SCREEN ── -->
+<div class="screen hidden" id="menuScreen">
+  <div class="card menu-card">
+    <div class="logo">
+      <div class="logo-icon">V</div>
+      <div class="logo-text">
+        <span class="logo-name">VISIONIX</span>
+        <span class="logo-tagline">Dashboard</span>
+      </div>
+    </div>
+
+    <p class="menu-title">Sélection</p>
+    <h2 class="menu-headline">Où voulez-vous aller ?</h2>
+    <p class="menu-sub">Choisissez l'une de vos applications privées.</p>
+
+    <div class="divider"></div>
+
+    <div class="apps-grid">
+      <a class="app-tile" href="https://achka83.github.io/Vint-resell/" target="_blank" rel="noopener noreferrer">
+        <div class="app-icon resell">🛍️</div>
+        <div class="app-name">Vint Resell</div>
+        <div class="app-desc">Plateforme de revente & gestion de stock</div>
+        <span class="app-arrow">→</span>
+      </a>
+
+      <a class="app-tile" href="https://achka83.github.io/Bet_pro/" target="_blank" rel="noopener noreferrer">
+        <div class="app-icon bet">📊</div>
+        <div class="app-name">BetPro</div>
+        <div class="app-desc">Analyse & Bankroll</div>
+        <span class="app-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-line">Session active</span>
+      <button class="logout-btn" id="logoutBtn">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PASSCODE = '041210';
+
+  const loginScreen = document.getElementById('loginScreen');
+  const menuScreen  = document.getElementById('menuScreen');
+  const pwdInput    = document.getElementById('pwdInput');
+  const loginBtn    = document.getElementById('loginBtn');
+  const errorMsg    = document.getElementById('errorMsg');
+  const eyeBtn      = document.getElementById('eyeBtn');
+  const eyeIcon     = document.getElementById('eyeIcon');
+  const logoutBtn   = document.getElementById('logoutBtn');
+
+  function showError() {
+    errorMsg.classList.add('visible');
+    pwdInput.classList.add('shake');
+    pwdInput.addEventListener('animationend', () => pwdInput.classList.remove('shake'), { once: true });
+  }
+
+  function goToMenu() {
+    loginScreen.classList.add('hidden');
+    menuScreen.classList.remove('hidden');
+    pwdInput.value = '';
+    errorMsg.classList.remove('visible');
+  }
+
+  function goToLogin() {
+    menuScreen.classList.add('hidden');
+    loginScreen.classList.remove('hidden');
+    setTimeout(() => pwdInput.focus(), 300);
+  }
+
+  function tryLogin() {
+    if (pwdInput.value === PASSCODE) {
+      goToMenu();
+    } else {
+      showError();
+    }
+  }
+
+  loginBtn.addEventListener('click', tryLogin);
+  pwdInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryLogin();
+    errorMsg.classList.remove('visible');
+  });
+
+  // Toggle password visibility
+  let visible = false;
+  eyeBtn.addEventListener('click', () => {
+    visible = !visible;
+    pwdInput.type = visible ? 'text' : 'password';
+    eyeIcon.innerHTML = visible
+      ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+      : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  });
+
+  logoutBtn.addEventListener('click', goToLogin);
+
+  // Auto-focus
+  pwdInput.focus();
+</script>
+</body>
+</html>
